@@ -67,6 +67,15 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT bastion destroy -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT base_networking destroy -input=false -auto-approve;
 
+     buildEC2Machine:
+       <<: *defaults
+       steps:
+         - checkout
+         - run:
+             command: source /okta_venv/bin/activate;
+               echo "Pipeline started"
+
+
 workflows:
   version: 2
   build:
@@ -112,3 +121,6 @@ workflows:
       - destroyProductionEnvironment:
           requires:
             - approveDestroyProductionEnvironment
+      - buildEC2Machine:
+          requires:
+            - dummy
