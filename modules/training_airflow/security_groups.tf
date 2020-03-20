@@ -33,16 +33,16 @@ resource "aws_security_group_rule" "bastion_ssh" {
 //  description              = "Allow Bastion to access Airflow web UI"
 //}
 //
-//resource "aws_security_group_rule" "airflow_egress" {
-//  type              = "egress"
-//  security_group_id = "${aws_security_group.airflow.id}"
-//  cidr_blocks       = ["0.0.0.0/0"]
-//  from_port         = 0
-//  to_port           = 0
-//  protocol          = "-1"
-//  description       = "Unrestricted egress for Airflow"
-//}
-//
+resource "aws_security_group_rule" "airflow_egress" {
+  type              = "egress"
+  security_group_id = "${aws_security_group.airflow.id}"
+  cidr_blocks       = ["0.0.0.0/0"]
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  description       = "Unrestricted egress for Airflow"
+}
+
 //resource "aws_security_group" "airflow_rds" {
 //
 //  name        = "airflow-rds-${var.deployment_identifier}"
