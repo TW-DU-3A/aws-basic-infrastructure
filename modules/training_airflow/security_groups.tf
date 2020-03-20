@@ -12,15 +12,16 @@ resource "aws_security_group" "airflow" {
   )}"
 }
 
-//resource "aws_security_group_rule" "bastion_ssh" {
-//  type                     = "ingress"
-//  security_group_id        = "${aws_security_group.airflow.id}"
-//  source_security_group_id = "${var.bastion_security_group_id}"
-//  from_port                = 22
-//  to_port                  = 22
-//  protocol                 = "tcp"
-//  description              = "SSH from Bastion to Airflow"
-//}
+resource "aws_security_group_rule" "bastion_ssh" {
+  type                     = "ingress"
+  security_group_id        = "${aws_security_group.airflow.id}"
+  source_security_group_id = "${var.bastion_security_group_id}"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  description              = "SSH from Bastion to Airflow"
+}
+
 //
 //resource "aws_security_group_rule" "bastion_web" {
 //  type                     = "ingress"
