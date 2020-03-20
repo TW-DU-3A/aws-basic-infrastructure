@@ -19,7 +19,7 @@ resource "aws_instance" "airflow_2" {
   vpc_security_group_ids = ["${aws_security_group.airflow_2.id}"]
   subnet_id              = "${var.subnet_ids[0]}"
   key_name               = "${var.ec2_key_pair}"
-  iam_instance_profile   = "${aws_iam_instance_profile.airflow.name}"
+  iam_instance_profile   = "${aws_iam_instance_profile.airflow_2.name}"
   user_data = "${data.template_cloudinit_config.airflow.rendered}"
 
   tags = "${merge(

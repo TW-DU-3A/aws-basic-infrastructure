@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "airflow_assume_role" {
+data "aws_iam_policy_document" "airflow_2_assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
@@ -8,18 +8,18 @@ data "aws_iam_policy_document" "airflow_assume_role" {
   }
 }
 
-resource "aws_iam_role" "airflow" {
+resource "aws_iam_role" "airflow_2" {
   name               = "airflow_2-${var.deployment_identifier}"
   description        = "Role for Airflow to coordinate EMR jobs"
-  assume_role_policy = "${data.aws_iam_policy_document.airflow_assume_role.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.airflow_2_assume_role.json}"
 }
 
-resource "aws_iam_instance_profile" "airflow" {
+resource "aws_iam_instance_profile" "airflow_2" {
   name = "airflow_2-${var.deployment_identifier}"
-  role = "${aws_iam_role.airflow.name}"
+  role = "${aws_iam_role.airflow_2.name}"
 }
 
-data "aws_iam_policy_document" "airflow_emr" {
+data "aws_iam_policy_document" "airflow_2_emr" {
   statement {
     actions = [
       "elasticmapreduce:DescribeCluster",
@@ -39,19 +39,19 @@ data "aws_iam_policy_document" "airflow_emr" {
   }
 }
 
-resource "aws_iam_policy" "airflow_emr" {
+resource "aws_iam_policy" "airflow_2_emr" {
   name        = "airflow_2-emr-${var.deployment_identifier}"
   description = "Policy for Airflow to submit jobs to ${var.emr_cluster_name}"
-  policy      = "${data.aws_iam_policy_document.airflow_emr.json}"
+  policy      = "${data.aws_iam_policy_document.airflow_2_emr.json}"
 }
 
-resource "aws_iam_policy_attachment" "airflow_emr" {
+resource "aws_iam_policy_attachment" "airflow_2_emr" {
   name       = "airflow_2-emr-${var.deployment_identifier}"
-  roles      = ["${aws_iam_role.airflow.name}"]
-  policy_arn = "${aws_iam_policy.airflow_emr.arn}"
+  roles      = ["${aws_iam_role.airflow_2.name}"]
+  policy_arn = "${aws_iam_policy.airflow_2_emr.arn}"
 }
 
-data "aws_iam_policy_document" "airflow_parameter_store" {
+data "aws_iam_policy_document" "airflow_2_parameter_store" {
   statement {
     actions = [
       "ssm:GetParameters"
@@ -63,14 +63,14 @@ data "aws_iam_policy_document" "airflow_parameter_store" {
   }
 }
 
-resource "aws_iam_policy" "airflow_parameter_store" {
+resource "aws_iam_policy" "airflow_2_parameter_store" {
   name        = "airflow_2-parameter-store-${var.deployment_identifier}"
   description = "Policy allowng Airflow to read ${var.rds_snapshot_password_parameter} from Parameter Store"
-  policy      = "${data.aws_iam_policy_document.airflow_parameter_store.json}"
+  policy      = "${data.aws_iam_policy_document.airflow_2_parameter_store.json}"
 }
 
-resource "aws_iam_policy_attachment" "airflow_parameter_store" {
+resource "aws_iam_policy_attachment" "airflow_2_parameter_store" {
   name       = "airflow_2-parameter-store-${var.deployment_identifier}"
-  roles      = ["${aws_iam_role.airflow.name}"]
-  policy_arn = "${aws_iam_policy.airflow_parameter_store.arn}"
+  roles      = ["${aws_iam_role.airflow_2.name}"]
+  policy_arn = "${aws_iam_policy.airflow_2_parameter_store.arn}"
 }
