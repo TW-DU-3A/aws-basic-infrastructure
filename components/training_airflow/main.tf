@@ -49,3 +49,4 @@ module "training_airflow" {
   rds_instance_class              = "db.t2.small"
 //  emr_cluster_name                = "${data.terraform_remote_state.training_emr_cluster.emr_cluster_name}"
 }
+

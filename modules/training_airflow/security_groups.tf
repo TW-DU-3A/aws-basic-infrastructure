@@ -22,17 +22,17 @@ resource "aws_security_group_rule" "bastion_ssh" {
   description              = "SSH from Bastion to Airflow"
 }
 
-//
-//resource "aws_security_group_rule" "bastion_web" {
-//  type                     = "ingress"
-//  security_group_id        = "${aws_security_group.airflow.id}"
-//  source_security_group_id = "${var.bastion_security_group_id}"
-//  from_port                = 8080
-//  to_port                  = 8080
-//  protocol                 = "tcp"
-//  description              = "Allow Bastion to access Airflow web UI"
-//}
-//
+
+resource "aws_security_group_rule" "bastion_web" {
+  type                     = "ingress"
+  security_group_id        = "${aws_security_group.airflow.id}"
+  source_security_group_id = "${var.bastion_security_group_id}"
+  from_port                = 8080
+  to_port                  = 8080
+  protocol                 = "tcp"
+  description              = "Allow Bastion to access Airflow web UI"
+}
+
 resource "aws_security_group_rule" "airflow_egress" {
   type              = "egress"
   security_group_id = "${aws_security_group.airflow.id}"
