@@ -73,7 +73,8 @@ jobs:
        - checkout
        - run:
            command: source /okta_venv/bin/activate;
-             echo "Pipeline started"
+             ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow apply -input=false -auto-approve ;
+
 
 
 workflows:
@@ -121,6 +122,11 @@ workflows:
       - destroyProductionEnvironment:
           requires:
             - approveDestroyProductionEnvironment
-      - buildEC2Machine:
+
+      - approveBuildEC2Machine:
+          type: approval
           requires:
             - dummy
+      - buildEC2Machine:
+          requires:
+            - approveBuildEC2Machine

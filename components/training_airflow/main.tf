@@ -25,14 +25,14 @@ data "terraform_remote_state" "bastion" {
   }
 }
 
-data "terraform_remote_state" "training_emr_cluster" {
-  backend = "s3"
-  config {
-    key    = "training_emr_cluster.tfstate"
-    bucket = "tw-dataeng-${var.cohort}-tfstate"
-    region = "${var.aws_region}"
-  }
-}
+//data "terraform_remote_state" "training_emr_cluster" {
+//  backend = "s3"
+//  config {
+//    key    = "training_emr_cluster.tfstate"
+//    bucket = "tw-dataeng-${var.cohort}-tfstate"
+//    region = "${var.aws_region}"
+//  }
+//}
 
 module "training_airflow" {
   source = "../../modules/training_airflow"
@@ -47,5 +47,5 @@ module "training_airflow" {
   initial_rds_snapshot            = "${var.cohort}-airflow"
   rds_snapshot_password_parameter = "${var.cohort}-airflow-password"
   rds_instance_class              = "db.t2.small"
-  emr_cluster_name                = "${data.terraform_remote_state.training_emr_cluster.emr_cluster_name}"
+//  emr_cluster_name                = "${data.terraform_remote_state.training_emr_cluster.emr_cluster_name}"
 }
