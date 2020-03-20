@@ -39,6 +39,6 @@ variable "rds_instance_class" {
   description = "RDS instance class to use for Airflow Postgres"
 }
 
-//variable "emr_cluster_name" {
-//  description = "EMR cluster to automate with airflow"
-//}
+variable "emr_cluster_name" {
+  description = "EMR cluster to automate with airflow"
+}

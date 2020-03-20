@@ -43,26 +43,26 @@ resource "aws_security_group_rule" "airflow_egress" {
   description       = "Unrestricted egress for Airflow"
 }
 
-//resource "aws_security_group" "airflow_rds" {
-//
-//  name        = "airflow-rds-${var.deployment_identifier}"
-//  description = "Security group for Airflow RDS Postgres"
-//  vpc_id      = "${var.vpc_id}"
-//
-//  tags = "${merge(
-//    local.common_tags,
-//    map(
-//      "Name", "airflow-rds-${var.deployment_identifier}"
-//    )
-//  )}"
-//}
-//
-//resource "aws_security_group_rule" "airflow_rds" {
-//  type                     = "ingress"
-//  security_group_id        = "${aws_security_group.airflow_rds.id}"
-//  source_security_group_id = "${aws_security_group.airflow.id}"
-//  from_port                = 5432
-//  to_port                  = 5432
-//  protocol                 = "tcp"
-//  description              = "Allow Airflow to connect to Postgres"
-//}
+resource "aws_security_group" "airflow_rds" {
+
+  name        = "airflow-rds-${var.deployment_identifier}"
+  description = "Security group for Airflow RDS Postgres"
+  vpc_id      = "${var.vpc_id}"
+
+  tags = "${merge(
+    local.common_tags,
+    map(
+      "Name", "airflow-rds-${var.deployment_identifier}"
+    )
+  )}"
+}
+
+resource "aws_security_group_rule" "airflow_rds" {
+  type                     = "ingress"
+  security_group_id        = "${aws_security_group.airflow_rds.id}"
+  source_security_group_id = "${aws_security_group.airflow.id}"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  description              = "Allow Airflow to connect to Postgres"
+}
