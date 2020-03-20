@@ -52,6 +52,16 @@ jobs:
                  ./scripts/build_ami.sh training_kafka ;
                  ./scripts/build_ami.sh training_ingester ;
 
+
+ buildAirflowProductionEnvironment:
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+           ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow_2 apply -input=false -auto-approve;
+
+
  destroyProductionEnvironment:
      <<: *defaults
      steps:
@@ -119,6 +129,13 @@ workflows:
           type: approval
           requires:
             - dummy
+      - approveBuildAirflowProductionEnvironment:
+          type: approval
+          requires:
+            - dummy
+      - buildAirflowProductionEnvironment:
+          requires:
+            - approveBuildAirflowProductionEnvironment
       - destroyProductionEnvironment:
           requires:
             - approveDestroyProductionEnvironment
