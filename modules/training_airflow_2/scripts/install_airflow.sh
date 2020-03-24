@@ -12,10 +12,13 @@ yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel p
 pip3 install apache-airflow
 
 mkdir -p /root/airflow/plugins
+mkdir -p /root/airflow/dags
 
 wget -O /root/airflow/plugins/livy_hook.py https://raw.githubusercontent.com/JituS/spark-etl/master/airflow/plugins/livy_hook.py
 wget -O /root/airflow/plugins/livy_sensor.py https://raw.githubusercontent.com/JituS/spark-etl/master/airflow/plugins/livy_sensor.py
 wget -O /root/airflow/plugins/livy_operator.py https://raw.githubusercontent.com/JituS/spark-etl/master/airflow/plugins/livy_operator.py
+
+wget -O /root/airflow/dags/sales-etl-job.py https://raw.githubusercontent.com/SwathiVarkala/spark-etl/master/airflow/dags/sales-etl-job.py
 
 export INPUT_PATH=hdfs:///user/hadoop/swathiv/input
 export RAW_PATH=hdfs:///user/hadoop/swathiv/raw
