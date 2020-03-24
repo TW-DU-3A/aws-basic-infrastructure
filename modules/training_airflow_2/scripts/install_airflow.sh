@@ -9,6 +9,7 @@ set -x
 yum -y groupinstall "Development Tools"
 yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel python3-devel wget cyrus-sasl-devel.x86_64 python3-setuptools gcc-c++
 
+pip3 install snakebite-py3
 pip3 install apache-airflow
 
 mkdir -p /root/airflow/plugins
@@ -20,10 +21,10 @@ wget -O /root/airflow/plugins/livy_operator.py https://raw.githubusercontent.com
 
 wget -O /root/airflow/dags/sales-etl-job.py https://raw.githubusercontent.com/SwathiVarkala/spark-etl/master/airflow/dags/sales-etl-job.py
 
-export INPUT_PATH=hdfs:///user/hadoop/swathiv/input
-export RAW_PATH=hdfs:///user/hadoop/swathiv/raw
-export DESTINATION_PATH=hdfs:///user/hadoop/swathiv/destination
-export ERROR_PATH=hdfs:///user/hadoop/swathiv/error
+export INPUT_PATH=/user/hadoop/swathiv/input
+export RAW_PATH=/user/hadoop/swathiv/raw
+export DESTINATION_PATH=/user/hadoop/swathiv/destination
+export ERROR_PATH=/user/hadoop/swathiv/error
 
 airflow initdb
 airflow scheduler -D
