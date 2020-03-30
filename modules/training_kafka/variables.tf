@@ -29,3 +29,11 @@ variable "bastion_security_group_id" {
 variable "emr_security_group_id" {
   description = "Id of EMR cluster security group to Kafka & Zookeeper ingress"
 }
+
+variable "root_volume_type" {
+  description = "EC2 instance Root volume type for Kafka"
+}
+
+variable "root_volume_size" {
+  description = "EC2 instance Root volume size for Kafka"
+}

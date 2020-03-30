@@ -45,4 +45,6 @@ module "training_kafka" {
   ec2_key_pair              = "tw-dataeng-${var.cohort}"
   dns_zone_id               = "${data.terraform_remote_state.base_networking.dns_zone_id}"
   instance_type             = "${var.kafka["instance_type"]}"
+  root_volume_type          = "${var.kafka["root_volume_type"]}"
+  root_volume_size          = "${var.kafka["root_volume_size"]}"
 }
