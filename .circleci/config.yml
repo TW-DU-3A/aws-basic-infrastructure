@@ -35,6 +35,18 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
 
+ buildTestEnvironment:
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+           ./scripts/run_terraform.sh $TRAINING_COHORT base_networking apply -input=false -auto-approve;
+           ./scripts/run_terraform.sh $TRAINING_COHORT bastion apply -input=false -auto-approve;
+           ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket apply -input=false -auto-approve;
+           ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
+           ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka_test apply -input=false -auto-approve;
+
  buildClientVPN:
      <<: *defaults
      steps:
@@ -91,6 +103,14 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT bastion destroy -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT base_networking destroy -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow_2 destroy -input=false -auto-approve;
+
+ destroyTestEnvironment:
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+           ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka_test destroy -input=false -auto-approve ;
 
  buildEC2Machine:
      <<: *defaults
@@ -158,6 +178,9 @@ workflows:
           type: approval
           requires:
             - dummy
+      - destroyProductionEnvironment:
+          requires:
+            - approveDestroyProductionEnvironment
 
       - approveBuildAirflow2ProductionEnvironment:
           type: approval
@@ -175,10 +198,6 @@ workflows:
           requires:
             - approveDestroyAirflow2ProductionEnvironment
 
-      - destroyProductionEnvironment:
-          requires:
-            - approveDestroyProductionEnvironment
-
       - approveBuildEC2Machine:
           type: approval
           requires:
@@ -194,3 +213,19 @@ workflows:
       - buildProductionEMREnvironment:
           requires:
             - approveBuildProductionEMREnvironment
+
+      - approveBuildTestEnvironment:
+          type: approval
+          requires:
+            - dummy
+      - buildTestEnvironment:
+          requires:
+            - approveBuildTestEnvironment
+
+      - approveDestroyTestEnvironment:
+          type: approval
+          requires:
+            - dummy
+      - destroyTestEnvironment:
+          requires:
+            - approveDestroyTestEnvironment
