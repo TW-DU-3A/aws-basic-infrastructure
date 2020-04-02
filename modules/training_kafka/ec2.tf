@@ -1,3 +1,17 @@
+data "local_file" "kafka_mount_setup" {
+  filename = "${path.module}/scripts/kafka_mount_setup.sh"
+}
+
+data "template_cloudinit_config" "kafka" {
+  gzip          = true
+  base64_encode = true
+
+  part {
+    content_type = "text/x-shellscript"
+    content      = "${data.local_file.kafka_mount_setup.content}"
+  }
+}
+
 resource "aws_instance" "kafka" {
   ami                    = "${data.aws_ami.training_kafka.image_id}"
   instance_type          = "${var.instance_type}"
@@ -8,8 +22,8 @@ resource "aws_instance" "kafka" {
   root_block_device = [{
     volume_type           = "${var.root_volume_type}"
     volume_size           = "${var.root_volume_size}"
-    delete_on_termination = false
   }]
+  user_data = "${data.template_cloudinit_config.kafka.rendered}"
 
   tags = "${merge(
     local.common_tags,
