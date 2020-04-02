@@ -52,6 +52,14 @@ jobs:
                  ./scripts/build_ami.sh training_kafka ;
                  ./scripts/build_ami.sh training_ingester ;
 
+ buildBaseTrainingKafkaAMI:
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+           ./scripts/build_ami.sh training_base_kafka ;
+
  buildAirflow2ProductionEnvironment:
    <<: *defaults
    steps:
@@ -121,6 +129,14 @@ workflows:
       - buildAMIs:
           requires:
             - approvebuildAMIs
+
+      - approvebuildBaseKafkaAMI:
+          type: approval
+          requires:
+            - dummy
+      - buildBaseTrainingKafkaAMI:
+          requires:
+            - approvebuildBaseKafkaAMI
 
       - approveBuildProductionEnvironment:
           type: approval
