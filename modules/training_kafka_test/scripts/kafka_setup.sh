@@ -27,10 +27,12 @@ cat /etc/kafka/server.properties \
 echo >> /tmp/server.properties
 mv /tmp/server.properties /etc/kafka/server.properties
 
-# set the group and owner on kafka log dir
-mkdir ${mount_point}/kafka-data
-chgrp -R confluent ${mount_point}/kafka-data
-chown -R cp-kafka ${mount_point}/kafka-data
+# set the group and owner on Mounted kafka log dir
+if [ ! -d ${mount_point}/kafka-data ]; then
+    mkdir ${mount_point}/kafka-data
+    chgrp -R confluent ${mount_point}/kafka-data
+    chown -R cp-kafka ${mount_point}/kafka-data
+fi
 
 sudo systemctl enable confluent-zookeeper
 sudo systemctl enable confluent-kafka
