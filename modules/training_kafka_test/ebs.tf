@@ -1,6 +1,6 @@
 resource "aws_ebs_volume" "kafka_test-ebs-volume" {
   availability_zone = "ap-southeast-1a"
-  size              = 50
+  size = 11
 }
 resource "aws_volume_attachment" "test_ebs_att" {
   device_name = "/dev/sdf"

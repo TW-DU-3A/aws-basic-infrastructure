@@ -36,7 +36,8 @@ fi
 
 sudo systemctl enable confluent-zookeeper
 
-# start kafka with this command not with the systemctl command.
+# use this command to start kafka don't use systemctl command.
 nohup /usr/bin/kafka-server-start /etc/kafka/server.properties
+
 # start again as enable is not starting the services
 sudo systemctl start confluent-zookeeper
